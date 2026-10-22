@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEHIND THE FRAME — La entrevista a Ale · Capstone Módulo 1 · Beyond Words</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root{
+    --teal:#025F6D; --teal-dark:#01424D; --amber:#E9A13B; --amber-soft:#FBEED3;
+    --cream:#FDF8EE; --card:#FFFFFF; --ink:#22303A; --muted:#5A6B76;
+    --ok:#1E7D46; --ok-bg:#E4F3EA; --bad:#B03A2E; --bad-bg:#FBEAE7;
+    --line:#E7DCC4; --radius:16px;
+  }
+  body{ font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif; background: var(--cream); color: var(--ink); font-size: 19px; line-height: 1.55; }
+  /* ===== Escenario / cabecera del show ===== */
+  .stage-top{
+    background:
+      radial-gradient(ellipse 340px 190px at 12% -40px, rgba(233,161,59,.45), rgba(233,161,59,0) 70%),
+      radial-gradient(ellipse 340px 190px at 88% -40px, rgba(233,161,59,.45), rgba(233,161,59,0) 70%),
+      radial-gradient(ellipse 420px 220px at 50% -60px, rgba(255,255,255,.20), rgba(255,255,255,0) 70%),
+      linear-gradient(180deg, var(--teal) 0%, var(--teal-dark) 100%);
+    color:#fff; text-align:center; padding: 30px 16px 24px;
+    border-bottom: 6px solid var(--amber);
+  }
+  .stage-top .kicker{ letter-spacing: 3px; font-size: 13px; text-transform: uppercase; color: var(--amber-soft); font-weight: 700; }
+  .stage-top h1{ font-size: 42px; letter-spacing: 2px; margin: 6px 0 2px; font-weight: 800; }
+  .stage-top .sub{ font-size: 18px; color: #D9EEF1; }
+  .hud{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-top:14px; }
+  .hud .pill{ background: rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.35); border-radius: 999px; padding: 5px 16px; font-size: 16px; font-weight: 700; }
+  .hud .pill b{ color: var(--amber); }
+  main{ max-width: 880px; margin: 0 auto; padding: 26px 18px 60px; }
+  .card{ background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 28px; box-shadow: 0 4px 18px rgba(2,95,109,.07); margin-bottom: 22px; }
+  h2{ font-size: 30px; color: var(--teal-dark); margin-bottom: 10px; }
+  h3{ font-size: 23px; color: var(--teal-dark); margin-bottom: 8px; }
+  p{ margin-bottom: 12px; }
+  .muted{ color: var(--muted); }
+  .small{ font-size: 16px; }
+  /* ===== Botones ===== */
+  .btn{ display:inline-block; border:none; cursor:pointer; font-size: 19px; font-weight: 700; border-radius: 999px; padding: 13px 26px; transition: transform .06s ease, box-shadow .15s ease; }
+  .btn:active{ transform: scale(.98); }
+  .btn-primary{ background: var(--teal); color:#fff; box-shadow: 0 4px 12px rgba(2,95,109,.30); }
+  .btn-primary:hover{ background: var(--teal-dark); }
+  .btn-amber{ background: var(--amber); color:#3A2703; box-shadow: 0 4px 12px rgba(233,161,59,.4); }
+  .btn-ghost{ background:#fff; color: var(--teal); border: 2px solid var(--teal); }
+  .btn-soft{ background: var(--amber-soft); color:#6B4A08; border: 1px solid var(--amber); }
+  .btn[disabled]{ opacity:.45; cursor:not-allowed; box-shadow:none; }
+  .btn-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top: 14px; }
+  /* ===== Portada / actos ===== */
+  .act-grid{ display:grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 720px){ .act-grid{ grid-template-columns: 1fr 1fr 1fr; } }
+  .act-card{ border:2px solid var(--line); border-radius: var(--radius); padding: 20px; background:#FFFDF6; display:flex; flex-direction:column; gap:8px; }
+  .act-card.done{ border-color: var(--ok); }
+  .act-card.locked{ opacity:.62; }
+  .act-card .act-tag{ font-size: 13px; font-weight: 800; letter-spacing: 2px; color: var(--amber); text-transform: uppercase; }
+  .act-card h3{ margin:0; font-size: 22px; }
+  .act-card .score-line{ font-weight: 700; color: var(--teal-dark); }
+  .progress-wrap{ background:#EFE6CF; border-radius: 999px; height: 16px; overflow:hidden; margin: 8px 0 4px; }
+  .progress-fill{ background: linear-gradient(90deg, var(--teal), var(--amber)); height: 100%; width: 0%; transition: width .4s ease; }
+  /* ===== Turno ===== */
+  .turn-head{ display:flex; justify-content: space-between; align-items: baseline; flex-wrap:wrap; gap:8px; margin-bottom: 14px; }
+  .turn-head .t-tag{ font-weight: 800; color: var(--teal); letter-spacing: 1px; }
+  .turn-head .t-score{ font-weight: 700; color:#6B4A08; }
+  .redcarpet{ background: linear-gradient(90deg, #8E2323, #B03A2E); color:#fff; border-radius: 10px; padding: 8px 14px; font-weight: 800; text-align:center; margin-bottom: 14px; letter-spacing: .5px; }
+  .bubble{ border-radius: 14px; padding: 18px 20px; margin-bottom: 14px; position: relative; }
+  .bubble .who{ font-size: 13px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .bubble.max{ background: #E8F3F5; border: 1px solid #BFDCE1; }
+  .bubble.max .who{ color: var(--teal); }
+  .bubble .line{ font-size: 22px; font-weight: 600; color: #123B44; }
+  .stage-note{ font-style: italic; color: var(--muted); font-size: 17px; margin-bottom: 10px; }
+  .interrupt-card{ background: #FFF4D6; border: 2px dashed var(--amber); border-radius: 14px; padding: 16px 20px; margin-bottom: 14px; text-align:center; }
+  .interrupt-card .big{ font-size: 21px; font-weight: 800; color:#6B4A08; }
+  .warn{ background: #FFF4D6; border-left: 6px solid var(--amber); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-weight: 600; }
+  /* ===== Pistas ===== */
+  .hint-box{ background: #FFF9EA; border: 1px solid var(--amber); border-radius: 12px; padding: 14px 18px; margin-bottom: 14px; }
+  .hint-box .hint-title{ font-weight: 800; color: #6B4A08; font-size: 15px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .hint-box .arranque{ font-size: 21px; font-weight: 800; color: var(--teal-dark); }
+  .hint-box .chunk-full{ font-size: 22px; font-weight: 800; color: var(--teal-dark); background:#fff; border:1px dashed var(--amber); border-radius:8px; padding: 6px 12px; display:inline-block; margin-top:6px; }
+  .hint-box .model-peek{ margin-top: 8px; font-style: italic; color: #44525B; }
+  /* ===== Opciones / bloques ===== */
+  .step-title{ font-weight: 800; color: var(--teal-dark); margin: 16px 0 8px; font-size: 20px; }
+  .opt-list{ display:flex; flex-direction: column; gap: 10px; }
+  .opt-btn{ text-align:left; background:#fff; border: 2px solid var(--teal); color: var(--teal-dark); border-radius: 12px; padding: 14px 18px; font-size: 21px; font-weight: 700; cursor: pointer; }
+  .opt-btn:hover{ background: #E8F3F5; }
+  .opt-btn.picked-ok{ background: var(--ok-bg); border-color: var(--ok); color: var(--ok); }
+  .opt-btn.picked-bad{ background: var(--bad-bg); border-color: var(--bad); color: var(--bad); }
+  .opt-btn[disabled]{ opacity:.75; cursor: default; }
+  .blk-bank{ display:flex; flex-wrap:wrap; gap: 10px; margin-bottom: 12px; }
+  .blk-btn{ background:#fff; border: 2px solid var(--teal); color: var(--teal-dark); border-radius: 10px; padding: 10px 14px; font-size: 19px; font-weight: 700; cursor:pointer; }
+  .blk-btn:hover{ background:#E8F3F5; }
+  .blk-btn.used{ opacity:.35; cursor: default; }
+  .built-line{ min-height: 58px; background: #FDF6E0; border: 2px dashed var(--amber); border-radius: 12px; padding: 12px 14px; font-size: 21px; font-weight: 700; color: #4A3605; margin-bottom: 10px; }
+  .built-line .placeholder{ color: #A68B4C; font-weight: 500; font-style: italic; font-size: 17px; }
+  /* ===== Producción ===== */
+  .produce-box{ background: #F4FAFB; border: 1px solid #BFDCE1; border-radius: 12px; padding: 16px 18px; margin-top: 6px; }
+  .produce-box .start-line{ font-size: 21px; font-weight: 800; color: var(--teal-dark); }
+  .rec-dot{ display:inline-block; width: 12px; height: 12px; border-radius: 50%; background: #D23B2E; margin-right: 8px; animation: blink 1s infinite; vertical-align: middle; }
+  @keyframes blink{ 0%,100%{opacity:1} 50%{opacity:.25} }
+  .transcript{ background:#fff; border:1px solid var(--line); border-radius: 10px; padding: 10px 14px; font-style: italic; margin-top: 10px; }
+  .sc-q{ font-weight: 700; margin: 8px 0; }
+  /* ===== Feedback ===== */
+  .fb-ok{ background: var(--ok-bg); border: 1px solid var(--ok); border-radius: 12px; padding: 12px 16px; margin-bottom: 10px; font-weight: 700; color: #14532B; }
+  .fb-bad{ background: var(--bad-bg); border: 1px solid var(--bad); border-radius: 12px; padding: 12px 16px; margin-bottom: 10px; color: #6E211A; }
+  .fb-bad .max-says{ font-style: italic; font-weight: 700; }
+  .model-box{ background: #FFF9EA; border-left: 6px solid var(--amber); border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; }
+  .model-box .m-title{ font-size: 13px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color:#6B4A08; margin-bottom: 4px; }
+  .model-box .m-text{ font-size: 21px; font-weight: 600; font-style: italic; color:#123B44; }
+  .note-line{ font-size: 17px; color: #33424C; margin-bottom: 6px; }
+  .note-line b{ color: var(--teal-dark); }
+  /* ===== Discurso de Oro / final ===== */
+  .golden-template{ font-size: 22px; font-weight: 600; line-height: 2.1; }
+  .golden-template input{ font-size: 19px; padding: 6px 10px; border: none; border-bottom: 3px solid var(--amber); background: #FFF9EA; border-radius: 6px 6px 0 0; min-width: 250px; font-family: inherit; color: var(--teal-dark); font-weight: 700; }
+  .golden-template input:focus{ outline: 2px solid var(--teal); }
+  .inv-grid{ display:grid; grid-template-columns: 1fr; gap: 8px; }
+  @media (min-width: 720px){ .inv-grid{ grid-template-columns: 1fr 1fr 1fr; } }
+  .inv-chip{ border-radius: 10px; padding: 10px 12px; font-size: 16.5px; font-weight: 700; border: 1.5px solid var(--line); background:#fff; }
+  .inv-chip .lesson{ display:block; font-size: 12px; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; font-weight: 800; }
+  .inv-chip.first{ background: var(--amber-soft); border-color: var(--amber); }
+  .inv-chip.retry{ background: #EFF1F3; border-color: #B9C2C9; color: #45525B; }
+  .inv-chip .pts{ float: right; }
+  .seal{ text-align:center; background: linear-gradient(180deg, #FFF6DC, #FBEED3); border: 3px solid var(--amber); border-radius: var(--radius); padding: 22px; margin-bottom: 22px; }
+  .seal .big{ font-size: 30px; font-weight: 800; color: #6B4A08; }
+  .stars{ font-size: 34px; color: var(--amber); letter-spacing: 4px; }
+  .hidden{ display:none !important; }
+  .center{ text-align:center; }
+  footer{ text-align:center; color: var(--muted); font-size: 15px; padding: 0 16px 34px; }
+</style>
+</head>
+<body>
+
+<header class="stage-top">
+  <div class="kicker">Beyond Words · Capstone del Módulo 1</div>
+  <h1>BEHIND THE FRAME</h1>
+  <div class="sub">«La entrevista a Ale» — Esta noche, la invitada eres TÚ.</div>
+  <div class="hud">
+    <span class="pill">⭐ Puntos: <b id="hudScore">0 / 300</b></span>
+    <span class="pill">👏 Aplausos: <b id="hudClap">0</b></span>
+    <span class="pill">🎬 Actos: <b id="hudActs">0 / 3</b></span>
+  </div>
+</header>
+
+<main id="app"><!-- La app se dibuja aquí --></main>
+
+<footer>Beyond Words · «Think in Chunks» · Tu avance se guarda automáticamente en este navegador.</footer>
+
+<script>
+"use strict";
+/* =====================================================================
+   DATOS — Guion exacto del informe del pedagogo (27 turnos · 30 chunks)
+   ===================================================================== */
+
+/* Inventario canónico de los 30 chunks, en orden de lección */
+const CHUNKS = [
+  // Lección 1 — Conectores / Thinking in Chunks
+  { id:"c1",  lesson:"Lección 1", text:"By the way,",            note:"<b>By the way</b> sirve para agregar un dato extra sin cambiar de tema." },
+  { id:"c2",  lesson:"Lección 1", text:"Speaking of which,",     note:"<b>Speaking of which</b> conecta lo que sigue con algo que se acaba de mencionar." },
+  { id:"c3",  lesson:"Lección 1", text:"That reminds me,",       note:"<b>That reminds me</b> introduce un recuerdo que lo anterior te trajo a la mente." },
+  { id:"c4",  lesson:"Lección 1", text:"In other words,",        note:"<b>In other words</b> reformula tu idea con palabras más simples." },
+  { id:"c5",  lesson:"Lección 1", text:"As a matter of fact,",   note:"<b>As a matter of fact</b> afirma el dato real, incluso contra un rumor." },
+  { id:"c6",  lesson:"Lección 1", text:"As I was saying,",       note:"<b>As I was saying</b> sirve para retomar tu historia después de una interrupción." },
+  { id:"c7",  lesson:"Lección 1", text:"On the other hand,",     note:"<b>On the other hand</b> presenta el otro lado de una situación." },
+  { id:"c8",  lesson:"Lección 1", text:"To be honest,",          note:"<b>To be honest</b> abre una confesión sincera." },
+  { id:"c9",  lesson:"Lección 1", text:"For what it's worth,",   note:"<b>For what it's worth</b> presenta un consejo con humildad." },
+  { id:"c10", lesson:"Lección 1", text:"At the end of the day,", note:"<b>At the end of the day</b> cierra con la conclusión que realmente importa." },
+  // Lección 2 — Chunks de reunión
+  { id:"c11", lesson:"Lección 2", text:"Let's get started.",     note:"<b>Let's get started</b> abre formalmente una reunión." },
+  { id:"c12", lesson:"Lección 2", text:"First on the agenda,",   note:"<b>First on the agenda</b> presenta el primer punto a tratar." },
+  { id:"c13", lesson:"Lección 2", text:"Can I jump in here?",    note:"<b>Can I jump in here?</b> te permite intervenir con educación." },
+  { id:"c14", lesson:"Lección 2", text:"Sorry to interrupt, but…", note:"<b>Sorry to interrupt, but…</b> recupera la palabra con firmeza y cortesía." },
+  { id:"c15", lesson:"Lección 2", text:"Any questions so far?", note:"<b>Any questions so far?</b> chequea dudas antes de seguir avanzando." },
+  { id:"c16", lesson:"Lección 2", text:"Are we aligned on this?", note:"<b>Are we aligned on this?</b> confirma que todos están de acuerdo en lo mismo." },
+  { id:"c17", lesson:"Lección 2", text:"Moving on to…",          note:"<b>Moving on to…</b> anuncia el paso al siguiente punto." },
+  { id:"c18", lesson:"Lección 2", text:"Let's circle back to that.", note:"<b>Let's circle back to that</b> devuelve la conversación a un tema pendiente." },
+  { id:"c19", lesson:"Lección 2", text:"To wrap up,",            note:"<b>To wrap up</b> resume y cierra la reunión en una frase." },
+  { id:"c20", lesson:"Lección 2", text:"So, action items:",      note:"<b>So, action items:</b> reparte tareas con responsables y fechas." },
+  // Lección 3 — Framing
+  { id:"c21", lesson:"Lección 3", text:"Here's the thing:",        note:"<b>Here's the thing:</b> anuncia la idea central, la que pocos entienden." },
+  { id:"c22", lesson:"Lección 3", text:"Let me put it this way:",   note:"<b>Let me put it this way:</b> reformula tu idea con una imagen más simple." },
+  { id:"c23", lesson:"Lección 3", text:"What I'm trying to say is", note:"<b>What I'm trying to say is</b> aclara tu idea cuando te malinterpretan." },
+  { id:"c24", lesson:"Lección 3", text:"What I mean is",           note:"<b>What I mean is</b> precisa tu idea de forma breve y directa." },
+  { id:"c25", lesson:"Lección 3", text:"As far as I know,",        note:"<b>As far as I know</b> acota tu respuesta a lo que realmente sabes." },
+  { id:"c26", lesson:"Lección 3", text:"To be fair,",              note:"<b>To be fair</b> concede lo justo de una crítica antes de responder." },
+  { id:"c27", lesson:"Lección 3", text:"The good news is",         note:"<b>The good news is</b> presenta primero la parte positiva de un anuncio." },
+  { id:"c28", lesson:"Lección 3", text:"The bad news is",          note:"<b>The bad news is</b> presenta la parte negativa sin rodeos." },
+  { id:"c29", lesson:"Lección 3", text:"The problem is",           note:"<b>The problem is</b> nombra el obstáculo de frente." },
+  { id:"c30", lesson:"Lección 3", text:"What happens next is",     note:"<b>What happens next is</b> anuncia lo que viene a continuación." }
+];
+const CHUNK_BY_ID = {};
+CHUNKS.forEach(function(c){ CHUNK_BY_ID[c.id] = c; });
+
+/* Turnos. options: distractores de la MISMA lección por chunk.
+   blocks: { seq: línea correcta en bloques, extra: bloques distractores } */
+const TURNS = [
+  /* ================= ACTO 1 · «Historias del mundo» — L1 ================= */
+  { id:"T1.1", act:1, speaker:"Max",
+    line:"Ale! Your film from Tokyo — a seventy-eight-year-old taiko drummer — has two million views. How does that feel?",
+    chunks:["c1"],
+    pista:"Responde cómo te sientes y, de pasada, agrega un dato curioso del baterista. Hay un chunk para meter un dato extra sin cambiar de tema.",
+    model:"Still shocked, honestly. We filmed three days in his tiny studio. By the way, he practices four hours every morning — at seventy-eight!",
+    options:{ c1:["Speaking of which,","That reminds me,"] } },
+  { id:"T1.2", act:1, speaker:"Max",
+    line:"Last year in Buenos Aires you filmed Doña Carmen, the tango singer. I still think about that scene.",
+    chunks:["c2","c3"],
+    pista:"Max mencionó a Carmen: conecta desde ahí («hablando de eso…») y sigue con el recuerdo que eso te trae («eso me recuerda…»). Dos chunks en cadena.",
+    model:"Speaking of which, that reminds me — Carmen sang the same tango her mother sang in 1952. She cried on camera. Then we all cried.",
+    options:{ c2:["By the way,","In other words,"], c3:["As I was saying,","In other words,"] } },
+  { id:"T1.3", act:1, speaker:"Max",
+    line:"People always ask me: what does Ale actually DO with a camera? Explain it like I'm five.",
+    chunks:["c4"],
+    pista:"Primero lo dijiste «técnico» en tu cabeza. Ahora dilo de otra manera, mucho más simple. Chunk para reformular.",
+    model:"I observe artists for days, until they forget the camera exists. In other words, I don't film performances — I film who they are when nobody is watching.",
+    options:{ c4:["As a matter of fact,","By the way,"] } },
+  { id:"T1.4", act:1, speaker:"Max", stage:"(Max lee una tarjeta)",
+    line:"Rumor alert! People say you once deleted an entire film because the artist 'didn't shine'.",
+    chunks:["c5"],
+    pista:"Max lanza un rumor «suave». Tú conoces el dato real… y es MÁS fuerte. Chunk para afirmar un hecho: «de hecho…».",
+    model:"As a matter of fact, I deleted TWO films. If the essence isn't there, the film doesn't go out. My name is on it.",
+    options:{ c5:["In other words,","As I was saying,"] } },
+  { id:"T1.5", act:1, speaker:"Max", interruption:true,
+    line:"Tell us about Marcus, the saxophonist in New Orleans.",
+    interruptLine:"Sorry about that! You were saying…?",
+    chunks:["c6"],
+    pista:"Hubo una interrupción y ahora retomas tu historia justo donde ibas. Chunk para recuperar el hilo.",
+    model:"As I was saying, Marcus plays the saxophone his grandfather carried across the ocean in 1946. Every note has that trip inside.",
+    options:{ c6:["As a matter of fact,","Speaking of which,"] } },
+  { id:"T1.6", act:1, speaker:"Max",
+    line:"Critics are divided. Some say your portraits are pure poetry. Others say… celebrity gossip with good lighting.",
+    chunks:["c7"],
+    pista:"Reconoce primero una parte de verdad… y presenta el otro lado de la moneda. Chunk de contraste.",
+    model:"It's true: fame opens doors for me. On the other hand, the camera doesn't care about fame — it finds the person, or it finds nothing.",
+    options:{ c7:["To be honest,","In other words,"] } },
+  { id:"T1.7", act:1, speaker:"Max", stage:"(Max baja la voz)",
+    line:"Ale. Between us. Were you ever afraid this whole dream would fail?",
+    chunks:["c8"],
+    pista:"Pregunta íntima: aquí toca confesar algo real. Abre la confesión con el chunk de honestidad.",
+    model:"To be honest, yes. In my first year I slept in my car between shoots. Fear was my co-pilot — I just never let it drive.",
+    options:{ c8:["For what it's worth,","As a matter of fact,"] } },
+  { id:"T1.8", act:1, speaker:"Max",
+    line:"A thousand young creators are watching right now. They have a phone and a dream. Your advice?",
+    chunks:["c9"],
+    pista:"Vas a dar un consejo con humildad: «por si sirve de algo…». Ese chunk abre el consejo.",
+    model:"For what it's worth, don't wait for the perfect camera. The essence is not in the lens — it's in the respect you bring to the story.",
+    options:{ c9:["To be honest,","At the end of the day,"] } },
+  { id:"T1.9", act:1, speaker:"Max",
+    line:"Last one for this part. Cameras, fame, airports, awards… after all of it, what really matters?",
+    chunks:["c10"],
+    pista:"Pregunta de balance final: «al fin y al cabo…». Ese chunk cierra tu idea.",
+    model:"At the end of the day, it's the people. A ninety-year-old drummer, a singer, a kid with a phone — the essence is always a human being.",
+    options:{ c10:["For what it's worth,","On the other hand,"] } },
+
+  /* ================= ACTO 2 · «La reunión de producción» — L2 ================= */
+  { id:"T2.1", act:2, speaker:"Mr. Sterling", stageOnly:true,
+    stage:"(Mr. Sterling está sentado con los brazos cruzados, en silencio, esperando. La reunión es tuya: tú la diriges.)",
+    chunks:["c11","c12"],
+    pista:"TÚ diriges la reunión: ábrela formalmente y presenta el primer punto del orden del día. Dos chunks.",
+    model:"Let's get started. First on the agenda, the concept: twelve artists, twelve countries, one question — what is your essence?",
+    blocks:{ seq:["Let's get started.","First on the agenda,","the concept:","twelve artists, twelve countries,","one question — what is your essence?"],
+             extra:["Let's circle back to that.","Any questions so far?"] } },
+  { id:"T2.2", act:2, speaker:"Mr. Sterling",
+    line:"Essence, essence… you know, my nephew has a drone. Drones are the future. In 2019 I bought a drone company, and—",
+    chunks:["c13"],
+    pista:"Sterling se va por las ramas. Intervén con educación para meter tu idea: es una pregunta.",
+    model:"Can I jump in here? The drone shot is beautiful, Mr. Sterling, but the essence is not from the air — it's at eye level.",
+    options:{ c13:["Sorry to interrupt, but…","Let's circle back to that."] } },
+  { id:"T2.3", act:2, speaker:"Mr. Sterling", stageOnly:true,
+    stage:"(Mr. Sterling asiente a regañadientes. Tú continúas tu pitch: la audiencia crece cada temporada y el formato viaja…)",
+    chunks:["c15"],
+    pista:"Antes de seguir con números, verifica si hay dudas hasta este punto. Chunk-pregunta de chequeo.",
+    model:"The audience grows every season, and the format travels. Any questions so far about the concept?",
+    options:{ c15:["Are we aligned on this?","Moving on to…"] } },
+  { id:"T2.4", act:2, speaker:"Mr. Sterling",
+    line:"—because in MY company, budgets are—",
+    stage:"(Mr. Sterling te interrumpe a media frase)",
+    chunks:["c14"],
+    pista:"Ahora ÉL te interrumpe a ti. Recupera la palabra pidiendo perdón por interrumpir, pero con firmeza.",
+    model:"Sorry to interrupt, but the budget is exactly my next point — and it's smaller than you think.",
+    options:{ c14:["Can I jump in here?","Let's circle back to that."] } },
+  { id:"T2.5", act:2, speaker:"Mr. Sterling",
+    line:"Money, money… by the way, do you film boats? My yacht in Cartagena is GORGEOUS—",
+    chunks:["c18"],
+    pista:"Sterling cambia de tema. Devuelve la conversación al asunto pendiente: «volvamos a eso».",
+    model:"The yacht film sounds fun — let's circle back to that after this meeting. Today we decide the series.",
+    options:{ c18:["Moving on to…","To wrap up,"] } },
+  { id:"T2.6", act:2, speaker:"Mr. Sterling",
+    line:"Fine. The series. What else?",
+    chunks:["c17"],
+    pista:"Tema cerrado: anuncia el paso al siguiente punto («pasando a…»).",
+    model:"Moving on to the schedule: we film in March, and we premiere in October, with the young creators in every country.",
+    options:{ c17:["Let's circle back to that.","First on the agenda,"] } },
+  { id:"T2.7", act:2, speaker:"Mr. Sterling",
+    line:"Hmm. March… October… I don't know.",
+    chunks:["c16"],
+    pista:"Antes de cerrar, confirma que todos están de acuerdo en lo mismo: resume en una frase y pregúntalo.",
+    model:"So: concept approved, budget as presented, filming in March. Are we aligned on this?",
+    options:{ c16:["Any questions so far?","To wrap up,"] } },
+  { id:"T2.8", act:2, speaker:"Mr. Sterling",
+    line:"OK, OK. Impress me. Close it.",
+    chunks:["c19","c20"],
+    pista:"Cierra la reunión como una profesional: resume en una frase y reparte las tareas con responsables y fechas. Dos chunks de cierre.",
+    model:"To wrap up: ESSENCE, Season Two — twelve artists, one question. So, action items: you send the contract on Friday, I send the locations list on Monday, and we meet again in two weeks.",
+    blocks:{ seq:["To wrap up:","ESSENCE, Season Two — twelve artists, one question.","So, action items:","you send the contract on Friday,","I send the locations list on Monday,","and we meet again in two weeks."],
+             extra:["Let's get started.","Moving on to the schedule:"] } },
+
+  /* ================= ACTO 3 · «El mensaje de Ale» — L3 ================= */
+  { id:"T3.1", act:3, speaker:"Max",
+    line:"Everyone asks about your secret. Tonight, tell us: what IS the secret?",
+    chunks:["c21"],
+    pista:"Vas a revelar la idea central, la que pocos entienden. Ese chunk anuncia: «la cosa es esta…».",
+    model:"Here's the thing: famous artists are not monuments. They're people who still get nervous before the show." },
+  { id:"T3.2", act:3, speaker:"Max",
+    line:"Now explain that to a kid. A ten-year-old with a phone.",
+    chunks:["c22"],
+    pista:"Dilo de otra forma, con una imagen simple que un niño entienda. Chunk: «déjame decirlo así».",
+    model:"Let me put it this way: my camera is not a camera. It's a chair — I sit next to people until they tell me the truth." },
+  { id:"T3.3", act:3, speaker:"Max", stage:"(Max finge entender mal)",
+    line:"So… you sit, and you wait for gossip?",
+    chunks:["c23"],
+    pista:"Max entendió mal A PROPÓSITO. Aclara qué es lo que realmente quieres decir.",
+    model:"No — what I'm trying to say is that patience is the technique. The essence appears when people feel safe." },
+  { id:"T3.4", act:3, speaker:"Max", stage:"(Max, cómico, insistiendo)",
+    line:"Patience! Like… doing nothing, but professionally?",
+    chunks:["c24"],
+    pista:"Segunda aclaración, más corta y directa: «lo que quiero decir es…».",
+    model:"What I mean is: I work for days so that one honest minute can happen." },
+  { id:"T3.5", act:3, speaker:"Max",
+    line:"One rumor before the finale: they say you're filming a secret project with a legendary rock star. True?",
+    chunks:["c25"],
+    pista:"No puedes confirmar el rumor: responde solo hasta donde sabes. Chunk: «hasta donde yo sé…».",
+    model:"As far as I know, that reunion is still just a dream… but dreams are my raw material, Max." },
+  { id:"T3.6", act:3, speaker:"Max",
+    line:"Your critics say the new project is 'too ambitious'. Twelve countries!",
+    chunks:["c26"],
+    pista:"Sé justa con la crítica: concede lo que tenga de cierto ANTES de responder. Chunk: «para ser justos…».",
+    model:"To be fair, they're partly right. Twelve countries in one year IS ambitious. But small dreams don't cross oceans." },
+  { id:"T3.7", act:3, speaker:"Max",
+    line:"Announcements! I hear there's good news and bad news about the project.",
+    chunks:["c27"],
+    pista:"Anuncia primero lo bueno. Chunk: «la buena noticia es…».",
+    model:"The good news is the series is funded — and young creators in twelve countries will film with me." },
+  { id:"T3.8", act:3, speaker:"Max",
+    line:"And the bad news?",
+    chunks:["c28"], redcarpet:true,
+    pista:"Ahora lo malo, sin miedo. Chunk: «la mala noticia es…».",
+    model:"The bad news is we lost our location in Kyoto — the temple closed for restoration." },
+  { id:"T3.9", act:3, speaker:"Max",
+    line:"Then tell us honestly: what's the real obstacle, Ale?",
+    chunks:["c29"], redcarpet:true,
+    pista:"Nombra el obstáculo de frente, sin rodeos. Chunk: «el problema es…».",
+    model:"The problem is time. These artists are legends — and legends don't wait. Every month, we lose someone." },
+  { id:"T3.10", act:3, speaker:"Max", stage:"(Las luces del público se apagan; solo Ale queda iluminada)",
+    line:"So… what happens next?",
+    chunks:["c30"], redcarpet:true,
+    pista:"Cierre de oro: anuncia lo que viene, mirando a la cámara. Chunk: «lo que sigue es…».",
+    model:"What happens next is simple: in March, twelve young creators pick up their phones — and we go find the essence, together." }
+];
+const TURN_BY_ID = {};
+TURNS.forEach(function(t){ TURN_BY_ID[t.id] = t; });
+const ACT_TURNS = { 1: TURNS.filter(t=>t.act===1), 2: TURNS.filter(t=>t.act===2), 3: TURNS.filter(t=>t.act===3) };
+const ACT_INFO = {
+  1:{ tag:"Acto 1", name:"Historias del mundo", lesson:"Lección 1 · Conectores",
+      intro:"Entrevista íntima de sillón: tus viajes, los artistas, el miedo y tu consejo. En este acto tienes ayuda: primero <b>eliges el chunk correcto</b> entre 3 opciones y luego <b>te grabas</b> empezando tu respuesta con ese chunk (o usas el auto-chequeo «Comparé mi respuesta»). La pista de Nivel 1 ya viene visible; si pides más pista, tu puntaje máximo baja." },
+  2:{ tag:"Acto 2", name:"La reunión de producción", lesson:"Lección 2 · Chunks de reunión",
+      intro:"El show recrea EN VIVO una reunión real de Ale. Max se pone las gafas y se convierte en un ejecutivo imposible: tu trabajo es venderle «ESSENCE — Temporada 2» y salir con acuerdos y tareas. Aquí la pista de Nivel 1 está tras el botón «¿Necesitas pista?», y en dos turnos <b>armarás la línea tocando bloques</b> antes de grabarla." },
+  3:{ tag:"Acto 3", name:"El mensaje de Ale", lesson:"Lección 3 · Framing",
+      intro:"Max te entrega el escenario: tu filosofía, tu anuncio y tu obstáculo. Ahora produces <b>libre</b>: no hay opciones para elegir. En los turnos 1 a 7 puedes pedir la pista de Nivel 1; los últimos tres turnos son el <b>«momento alfombra roja»</b>: sin pistas. Si fallas, ves el modelo y reintentas con medio crédito. ¡Nunca te quedas bloqueada!" }
+};
+const GOLDEN_MODEL = "At the end of the day, the essence is people. To wrap up: thank you for traveling the world with us. And what happens next is… your turn. Pick up your phone. Tell a story.";
+
+/* =====================================================================
+   ESTADO (localStorage) + UTILIDADES
+   ===================================================================== */
+const LS_KEY = "entrevistaAleV1";
+function defaultState(){
+  return { v:1,
+    acts:{ "1":{best:null}, "2":{best:null}, "3":{best:null} },
+    run:null, /* {act, turnIdx, results:{turnId:{cid:{score,firstTry,repasar}}}} */
+    golden:{ a:"", b:"", c:"", done:false } };
+}
+function loadState(){
+  try{ const raw = localStorage.getItem(LS_KEY); if(raw){ const p = JSON.parse(raw); if(p && p.v===1 && p.acts) return p; } }catch(e){}
+  return defaultState();
+}
+let S = loadState();
+function saveState(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} }
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function shuffle(a){ const r = a.slice(); for(let i=r.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); const t=r[i]; r[i]=r[j]; r[j]=t; } return r; }
+function actUnlocked(act){
+  if(act===1) return true;
+  if(act===2) return !!S.acts["1"].best;
+  if(act===3) return !!S.acts["2"].best;
+  return false;
+}
+function bestScore(){ let t=0; [1,2,3].forEach(function(a){ if(S.acts[String(a)].best) t += S.acts[String(a)].best.score; }); return t; }
+function applauseCount(){ let n=0; [1,2,3].forEach(function(a){ const b=S.acts[String(a)].best; if(b) Object.keys(b.chunks).forEach(function(cid){ if(b.chunks[cid].score>=8) n++; }); }); return n; }
+function actsDoneCount(){ return [1,2,3].filter(function(a){ return !!S.acts[String(a)].best; }).length; }
+function updateHUD(){
+  document.getElementById("hudScore").textContent = bestScore() + " / 300";
+  document.getElementById("hudClap").textContent = applauseCount();
+  document.getElementById("hudActs").textContent = actsDoneCount() + " / 3";
+}
+function chunkResultFromBest(cid){
+  for(let a=1;a<=3;a++){ const b = S.acts[String(a)].best; if(b && b.chunks && b.chunks[cid]) return b.chunks[cid]; }
+  return null;
+}
+/* Normalización tolerante: minúsculas, sin puntuación, palabras */
+function normWords(s){
+  return String(s||"").toLowerCase().replace(/[’‘]/g,"'").replace(/['’.,;:!?…"“”"()\-—–]/g," ").replace(/\s+/g," ").trim().split(" ").filter(Boolean);
+}
+function findSeq(hay, needle){
+  for(let i=0;i+needle.length<=hay.length;i++){ let ok=true; for(let j=0;j<needle.length;j++){ if(hay[i+j]!==needle[j]){ ok=false; break; } } if(ok) return i; }
+  return -1;
+}
+/* Actos 1–2: el chunk debe aparecer al inicio (se tolera una frase breve antes, como en los modelos).
+   Acto 3: en cualquier punto de la respuesta. */
+function chunkFoundIn(cid, transcript, act){
+  const words = normWords(transcript); const cw = normWords(CHUNK_BY_ID[cid].text);
+  const idx = findSeq(words, cw);
+  if(idx<0) return false;
+  if(act===3) return true;
+  return idx <= 13;
+}
+
+/* =====================================================================
+   PORTADA DEL SHOW
+   ===================================================================== */
+const app = document.getElementById("app");
+function renderCover(){
+  updateHUD();
+  const total = bestScore(); const pct = Math.round(total/300*100);
+  let actsHtml = "";
+  [1,2,3].forEach(function(a){
+    const info = ACT_INFO[a]; const best = S.acts[String(a)].best; const unl = actUnlocked(a);
+    const running = S.run && S.run.act===a;
+    let status, btn;
+    if(!unl){ status = "🔒 Se desbloquea al completar el acto anterior."; btn = '<button class="btn btn-ghost" disabled>🔒 Bloqueado</button>'; }
+    else if(running){ status = "⏩ En curso: vas en el turno " + (S.run.turnIdx+1) + " de " + ACT_TURNS[a].length + "."; btn = '<button class="btn btn-amber" data-act-start="' + a + '">⏩ Continuar</button>'; }
+    else if(best){ status = "✔ Completado · Mejor puntaje: <b>" + best.score + " / 100</b>"; btn = '<button class="btn btn-ghost" data-act-start="' + a + '">🔁 Repetir acto</button>'; }
+    else { status = "Listo para empezar."; btn = '<button class="btn btn-primary" data-act-start="' + a + '">▶ Empezar</button>'; }
+    actsHtml += '<div class="act-card' + (best?" done":"") + (!unl?" locked":"") + '">' +
+      '<div class="act-tag">' + info.tag + ' · ' + info.lesson + '</div>' +
+      '<h3>' + info.name + '</h3>' +
+      '<p class="small muted">' + ACT_TURNS[a].length + ' turnos · ' + ACT_TURNS[a].reduce(function(n,t){return n+t.chunks.length;},0) + ' chunks · 100 puntos</p>' +
+      '<p class="score-line small">' + status + '</p>' + btn + '</div>';
+  });
+  const goldenReady = !!S.acts["3"].best;
+  const finalReady = goldenReady && S.golden.done;
+  app.innerHTML =
+    '<div class="card">' +
+      '<h2>🎬 Esta noche, la invitada eres TÚ: eres Ale</h2>' +
+      '<p>Ale es una famosa creadora de medios audiovisuales que recorrió el mundo captando la esencia de grandes artistas: un baterista de taiko en Tokio, la tanguera Carmen en Buenos Aires, el saxofonista Marcus en Nueva Orleans. Hoy Max Vidal la entrevista en el talk show <b>BEHIND THE FRAME</b>… y tú respondes por ella.</p>' +
+      '<p>Para brillar, tienes que usar <b>todo lo aprendido en el Módulo 1</b>: los 30 chunks de las tres lecciones, en el momento exacto en que la conversación los pide.</p>' +
+      '<p class="small muted"><b>Cómo se juega:</b> 27 turnos · 30 chunks · <b>300 puntos</b>. Apruebas el capstone con <b>240 puntos o más</b> y los <b>30 chunks intentados</b>. Las pistas tienen 3 niveles y se van desvaneciendo: pedir más pista baja tu puntaje máximo (Nivel 2 → 8 pts · Nivel 3 → 5 pts). Tu avance se guarda solo.</p>' +
+      '<div class="progress-wrap"><div class="progress-fill" style="width:' + pct + '%"></div></div>' +
+      '<p class="small muted">Tu puntaje total: <b>' + total + ' / 300</b> (' + pct + '%) · 👏 ' + applauseCount() + ' chunks con aplauso (8 pts o más)</p>' +
+    '</div>' +
+    '<div class="act-grid">' + actsHtml + '</div>' +
+    '<div class="card">' +
+      '<h3>🌟 El Discurso de Oro</h3>' +
+      '<p>Al terminar el Acto 3, Max se despide y te deja sola frente a la cámara: 30 segundos, tres chunks de cierre, tu frase de oro.</p>' +
+      (S.golden.done
+        ? '<p class="score-line">✔ Ya hiciste tu Discurso de Oro.</p><div class="btn-row"><button class="btn btn-ghost" data-testid="golden-start">🔁 Rehacer mi discurso</button></div>'
+        : '<div class="btn-row"><button class="btn btn-amber" data-testid="golden-start" ' + (goldenReady?"":"disabled") + '>🌟 Ir al Discurso de Oro</button></div>' +
+          (goldenReady ? "" : '<p class="small muted">Se desbloquea al completar el Acto 3.</p>')) +
+    '</div>' +
+    (finalReady
+      ? '<div class="card center"><h3>🏆 Tu noche está completa</h3><p>Ya puedes ver tu pantalla final: puntaje, rating del show, tu mapa de los 30 chunks y tu lista «Para repasar».</p><div class="btn-row" style="justify-content:center"><button class="btn btn-primary" data-testid="final-open">Ver mi pantalla final</button></div></div>'
+      : "") +
+    '<div class="center"><button class="btn btn-soft" data-testid="reset-all">🗑 Borrar todo mi avance</button></div>';
+}
+
+/* =====================================================================
+   CORTINILLA DE ACTO
+   ===================================================================== */
+function renderActIntro(act){
+  updateHUD();
+  const info = ACT_INFO[act];
+  let cortinilla = "";
+  if(act===2) cortinilla = '<div class="bubble max"><div class="who">Max Vidal</div><div class="line">"I am now Mr. Sterling, a VERY difficult executive. You have two minutes to sell me your new series."</div></div>';
+  if(act===3) cortinilla = '<div class="bubble max"><div class="who">Max Vidal</div><div class="line">"Mr. Sterling is gone. Ale… the floor is yours."</div></div>';
+  app.innerHTML =
+    '<div class="card center">' +
+      '<div class="act-tag" style="font-size:14px;font-weight:800;letter-spacing:2px;color:var(--amber);text-transform:uppercase">🎬 Cortinilla · ' + info.tag + '</div>' +
+      '<h2>' + info.name + '</h2>' +
+      '<p class="muted">' + info.lesson + ' · ' + ACT_TURNS[act].length + ' turnos</p>' +
+      cortinilla +
+      '<p style="text-align:left">' + info.intro + '</p>' +
+      '<div class="btn-row" style="justify-content:center">' +
+        '<button class="btn btn-ghost" data-testid="to-cover">← Volver al menú</button>' +
+        '<button class="btn btn-primary" data-testid="act-begin" data-act="' + act + '">🎬 Empezar el ' + info.tag.toLowerCase() + '</button>' +
+      '</div>' +
+    '</div>';
+}
+
+/* =====================================================================
+   RESUMEN DE ACTO
+   ===================================================================== */
+let LAST_SUMMARY = null;
+function buildActResult(act, results){
+  const chunks = {}; let score = 0;
+  ACT_TURNS[act].forEach(function(t){ const r = results[t.id] || {}; t.chunks.forEach(function(cid){ if(r[cid]){ chunks[cid] = r[cid]; score += r[cid].score; } }); });
+  return { score: score, chunks: chunks };
+}
+function renderActSummary(){
+  updateHUD();
+  if(!LAST_SUMMARY){ renderCover(); return; }
+  const act = LAST_SUMMARY.act; const res = LAST_SUMMARY.result; const info = ACT_INFO[act];
+  let chips = "";
+  ACT_TURNS[act].forEach(function(t){ t.chunks.forEach(function(cid){ const r = res.chunks[cid]; if(r){ chips += '<span class="inv-chip ' + (r.firstTry?"first":"retry") + '">' + esc(CHUNK_BY_ID[cid].text) + ' <span class="pts">' + (r.firstTry?"⭐":"✔") + ' ' + r.score + ' pts</span></span>'; } }); });
+  app.innerHTML =
+    '<div class="card center">' +
+      '<div style="font-size:15px;font-weight:800;letter-spacing:2px;color:var(--amber);text-transform:uppercase">🎬 Fin del ' + info.tag + '</div>' +
+      '<h2>' + info.name + '</h2>' +
+      '<p style="font-size:24px;font-weight:800;color:var(--teal-dark)">Puntaje del acto: ' + res.score + ' / 100</p>' +
+      (LAST_SUMMARY.isBest ? '<p>🌟 ¡Es tu mejor puntaje en este acto! Queda guardado.</p>' : '<p class="muted">Tu mejor puntaje guardado en este acto es <b>' + S.acts[String(act)].best.score + ' / 100</b> (se conserva el mejor).</p>') +
+      '<p class="muted">Puntaje total del capstone: <b>' + bestScore() + ' / 300</b></p>' +
+    '</div>' +
+    '<div class="card"><h3>Tus chunks de este acto</h3><div class="inv-grid">' + chips + '</div>' +
+      '<p class="small muted" style="margin-top:10px">⭐ = lo lograste a la primera · ✔ = lo lograste con reintento o más pista.</p></div>' +
+    '<div class="card center"><div class="btn-row" style="justify-content:center">' +
+      '<button class="btn btn-ghost" data-testid="to-cover">Ir al menú</button>' +
+      '<button class="btn btn-soft" data-testid="repeat-act" data-act="' + act + '">🔁 Repetir este acto</button>' +
+      (act<3 ? '<button class="btn btn-primary" data-testid="next-act" data-act="' + (act+1) + '">Siguiente acto ▶</button>'
+             : '<button class="btn btn-amber" data-testid="golden-start">🌟 Ir al Discurso de Oro</button>') +
+    '</div></div>';
+}
+/* =====================================================================
+   MOTOR DE TURNOS
+   ===================================================================== */
+let RT = null;
+function startTurn(){
+  if(!S.run){ renderCover(); return; }
+  const turn = ACT_TURNS[S.run.act][S.run.turnIdx];
+  RT = { turn: turn,
+    phase: turn.interruption ? "pre" : "main",
+    hint: turn.act===1 ? 1 : 0,
+    step: turn.act===3 ? "produce" : (turn.blocks ? "build" : "choose"),
+    choiceStep: 0, optionsFor: null, wrongPicked: {}, choiceMsgHtml: "",
+    choiceWrongs: {}, choiceRevealed: {},
+    bankOrder: turn.blocks ? shuffle(turn.blocks.seq.concat(turn.blocks.extra)) : null,
+    builtIdx: [], buildWrongs: 0, buildHadWrong: false, buildMsgHtml: "",
+    prodFailed: {}, scored: {}, selfCheckOpen: false,
+    lastEval: null, lastTranscript: "", recording: false, recError: false, notice: "" };
+  renderTurn();
+}
+function runScoreSoFar(){
+  if(!S.run) return 0; let t = 0;
+  Object.keys(S.run.results).forEach(function(tid){ const r = S.run.results[tid]; Object.keys(r).forEach(function(cid){ t += r[cid].score; }); });
+  if(RT) Object.keys(RT.scored).forEach(function(cid){ t += RT.scored[cid].score; });
+  return t;
+}
+function arranqueOf(cid){
+  const w = CHUNK_BY_ID[cid].text.replace(/[.,;:!?…""]/g,"").split(/\s+/).filter(Boolean);
+  return w.slice(0,2).join(" ") + "…";
+}
+function hintHtml(){
+  const t = RT.turn;
+  if(t.redcarpet) return '<p class="stage-note">⭐ Momento alfombra roja: en este turno no hay pistas. Respira hondo… y brilla, Ale.</p>';
+  const maxHint = t.act===3 ? 1 : 3;
+  if(RT.hint===0) return '<div class="btn-row"><button class="btn btn-soft" data-testid="hint-show">💡 ¿Necesitas pista?</button></div>';
+  let inner = '<div class="hint-title">💡 Pista · Nivel ' + RT.hint + '</div><div>' + esc(t.pista) + '</div>';
+  if(RT.hint>=2) inner += '<div style="margin-top:8px">Arranque: ' + t.chunks.map(function(cid){ return '<span class="arranque">«' + esc(arranqueOf(cid)) + '»</span>'; }).join(' &nbsp;+&nbsp; ') + '</div>';
+  if(RT.hint>=3){
+    inner += '<div style="margin-top:8px">Chunk completo: ' + t.chunks.map(function(cid){ return '<span class="chunk-full">' + esc(CHUNK_BY_ID[cid].text) + '</span>'; }).join(' ') + '</div>';
+    inner += '<div class="model-peek">Modelo — Ale lo diría así: «' + esc(t.model) + '»</div>';
+  }
+  let html = '<div class="hint-box">' + inner + '</div>';
+  if(RT.hint < maxHint) html += '<div class="btn-row" style="margin-top:0"><button class="btn btn-soft" data-testid="hint-more">💡 Más pista (Nivel ' + (RT.hint+1) + ')</button><span class="small muted" style="align-self:center">Más pista = puntaje máximo menor (Nivel 2 → 8 pts · Nivel 3 → 5 pts y el chunk va a «Para repasar»).</span></div>';
+  return html;
+}
+function choiceHtml(){
+  const t = RT.turn; const cid = t.chunks[RT.choiceStep];
+  if(!RT.optionsFor || RT.optionsFor.stepIdx!==RT.choiceStep)
+    RT.optionsFor = { stepIdx: RT.choiceStep, list: shuffle([CHUNK_BY_ID[cid].text].concat(t.options[cid])) };
+  let h = "";
+  if(RT.choiceStep>0) h += '<p>✔ Primer chunk: <b>' + esc(CHUNK_BY_ID[t.chunks[0]].text) + '</b></p>';
+  const label = t.chunks.length>1 ? (RT.choiceStep===0 ? "Elige el PRIMER chunk de tu respuesta:" : "Ahora elige el SEGUNDO chunk:") : "Elige el chunk que Ale necesita en este momento:";
+  h += '<div class="step-title">Paso 1 · ' + label + '</div><div class="opt-list">';
+  RT.optionsFor.list.forEach(function(txt){
+    const ok = txt === CHUNK_BY_ID[cid].text; const wrong = !!RT.wrongPicked[txt];
+    h += '<button class="opt-btn' + (wrong ? " picked-bad" : "") + '" data-cid="' + cid + '" data-ok="' + (ok?"1":"0") + '"' + (wrong?" disabled":"") + '>' + esc(txt) + '</button>';
+  });
+  h += '</div>' + (RT.choiceMsgHtml || "");
+  return h;
+}
+function onChoice(btn){
+  const t = RT.turn; const cid = btn.dataset.cid; const ok = btn.dataset.ok==="1";
+  if(ok){
+    RT.choiceStep++; RT.wrongPicked = {}; RT.choiceMsgHtml = "";
+    if(RT.choiceStep >= t.chunks.length) RT.step = "produce"; else RT.optionsFor = null;
+    renderTurn(); return;
+  }
+  RT.wrongPicked[btn.textContent] = true;
+  RT.choiceWrongs[cid] = (RT.choiceWrongs[cid]||0)+1;
+  if(RT.choiceWrongs[cid]>=2){
+    RT.choiceRevealed[cid] = true;
+    RT.notice = "El chunk correcto era «" + CHUNK_BY_ID[cid].text + "». Al verlo tras dos intentos, este chunk queda con puntaje máximo reducido y entra a tu lista «Para repasar». ¡Practícalo en voz alta!";
+    RT.choiceStep++; RT.wrongPicked = {}; RT.choiceMsgHtml = "";
+    if(RT.choiceStep >= t.chunks.length) RT.step = "produce"; else RT.optionsFor = null;
+    renderTurn(); return;
+  }
+  if(RT.hint<3) RT.hint++;
+  RT.choiceMsgHtml = '<div class="fb-bad" style="margin-top:12px"><span class="max-says">Max: "Hmm, Ale, that sounded a bit flat…"</span><br>Ese no es el chunk de este momento. La pista subió de nivel: revísala y elige de nuevo.</div>';
+  renderTurn();
+}
+function buildHtml(){ return '<div id="buildArea">' + buildInner() + '</div>'; }
+function refreshBuildArea(){ const el = document.getElementById("buildArea"); if(el) el.innerHTML = buildInner(); }
+function buildInner(){
+  const t = RT.turn;
+  const built = RT.builtIdx.map(function(i){ return RT.bankOrder[i]; });
+  let h = '<div class="step-title">Paso 1 · Arma la línea de Ale tocando los bloques en orden:</div>';
+  h += '<div class="built-line" id="builtLine">' + (built.length ? built.map(esc).join(' ') : '<span class="placeholder">Aquí se arma tu línea…</span>') + '</div>';
+  h += '<div class="blk-bank">';
+  RT.bankOrder.forEach(function(txt, i){
+    const used = RT.builtIdx.indexOf(i)>=0;
+    h += '<button class="blk-btn' + (used ? " used" : "") + '" data-bi="' + i + '"' + (used ? " disabled" : "") + '>' + esc(txt) + '</button>';
+  });
+  h += '</div>';
+  h += '<div class="btn-row"><button class="btn btn-primary" data-testid="check-blocks">✔ Comprobar la línea</button><button class="btn btn-ghost" data-testid="clear-blocks">↩ Limpiar bloques</button></div>';
+  h += (RT.buildMsgHtml || "");
+  return h;
+}
+function sameNorm(a, b){ return normWords(a).join(" ") === normWords(b).join(" "); }
+function onCheckBlocks(){
+  const t = RT.turn; const seq = t.blocks.seq;
+  const built = RT.builtIdx.map(function(i){ return RT.bankOrder[i]; });
+  const correct = built.length===seq.length && built.every(function(v, ix){ return v===seq[ix]; });
+  if(correct){ RT.buildMsgHtml = ""; RT.step = "produce"; renderTurn(); return; }
+  RT.buildWrongs++; RT.buildHadWrong = true;
+  if(RT.buildWrongs>=2){
+    t.chunks.forEach(function(cid){ RT.choiceRevealed[cid] = true; });
+    RT.notice = "La línea correcta era: «" + t.model + "» — Los chunks quedaron revelados (puntaje máximo reducido) y entran a tu lista «Para repasar». Ahora grábatela.";
+    RT.step = "produce"; renderTurn(); return;
+  }
+  if(RT.hint<3) RT.hint++;
+  RT.buildMsgHtml = '<div class="fb-bad" style="margin-top:12px"><span class="max-says">Max: "Hmm, Ale, that sounded a bit flat…"</span><br>La línea no quedó bien. La pista subió de nivel: revísala, limpia los bloques y ármala otra vez.</div>';
+  RT.builtIdx = []; renderTurn();
+}
+/* ---------- Producción: grabación + auto-chequeo ---------- */
+const SR_SUPPORTED = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+function produceHtml(){
+  const t = RT.turn;
+  const pending = t.chunks.filter(function(cid){ return !RT.scored[cid]; });
+  let h = "";
+  if(RT.notice) h += '<div class="warn">' + esc(RT.notice) + '</div>';
+  h += '<div class="produce-box">';
+  if(t.act===3){
+    h += '<div class="step-title" style="margin-top:0">Tu turno, Ale · Produce tu respuesta</div>';
+    h += '<p>Di tu respuesta en voz alta usando el chunk que pide este momento de la entrevista: tiene que sonar dentro de tu respuesta. 1 o 2 frases bastan.</p>';
+  } else {
+    h += '<div class="step-title" style="margin-top:0">Paso 2 · Grábate: tu respuesta empieza con…</div>';
+    h += '<p class="start-line">' + pending.map(function(cid){ return esc(CHUNK_BY_ID[cid].text); }).join(' &nbsp;+&nbsp; ') + '</p>';
+    h += '<p class="small muted">Empieza con el chunk (o tras una frase muy breve, como hace Ale en el modelo) y completa tu idea: 1 o 2 frases bastan.</p>';
+    const done = t.chunks.filter(function(cid){ return !!RT.scored[cid]; });
+    if(done.length) h += '<p>✔ Ya lograste: ' + done.map(function(cid){ return '<b>' + esc(CHUNK_BY_ID[cid].text) + '</b> (' + RT.scored[cid].score + ' pts)'; }).join(' · ') + '</p>';
+  }
+  h += '<div class="btn-row">';
+  if(SR_SUPPORTED) h += '<button class="btn btn-amber" data-testid="btn-record">' + (RT.recording ? '<span class="rec-dot"></span>Escuchando… ¡habla ahora!' : '🎙 Grábate') + '</button>';
+  h += '<button class="btn btn-ghost" data-testid="btn-selfcheck">Comparé mi respuesta</button></div>';
+  if(!SR_SUPPORTED) h += '<p class="small muted" style="margin-top:8px">Tu navegador no tiene reconocimiento de voz: di tu respuesta en voz alta (¡de verdad!) y luego usa «Comparé mi respuesta» para chequearte contra el modelo. El flujo nunca se bloquea por falta de micrófono.</p>';
+  if(RT.recError) h += '<p class="small" style="color:var(--bad);margin-top:8px">No se pudo usar el micrófono. No pasa nada: di tu respuesta en voz alta y usa «Comparé mi respuesta».</p>';
+  if(RT.lastTranscript) h += '<div class="transcript">Escuché: «' + esc(RT.lastTranscript) + '»</div>';
+  if(RT.selfCheckOpen) h += selfCheckHtml();
+  h += '</div>';
+  return h;
+}
+function selfCheckHtml(){
+  const t = RT.turn;
+  const pending = t.chunks.filter(function(cid){ return !RT.scored[cid]; });
+  let h = '<div style="margin-top:14px"><div class="model-box"><div class="m-title">Ale lo diría así</div><div class="m-text">«' + esc(t.model) + '»</div></div>';
+  if(pending.length===1){
+    const cid = pending[0];
+    h += '<p class="sc-q">¿Usaste el chunk «' + esc(CHUNK_BY_ID[cid].text) + '»' + (t.act===3 ? ' en tu respuesta?' : ' al inicio de tu respuesta (o tras una frase breve)?') + '</p>';
+    h += '<div class="btn-row"><button class="btn btn-primary" data-sc="used">✔ Sí, lo usé</button><button class="btn btn-ghost" data-sc="notused">✘ No lo usé</button></div>';
+  } else {
+    h += '<p class="sc-q">¿Qué chunks usaste en tu respuesta?</p><div class="btn-row">' +
+      '<button class="btn btn-primary" data-sc="both">✔ Los dos</button>' +
+      '<button class="btn btn-ghost" data-sc="only-first">Solo «' + esc(CHUNK_BY_ID[pending[0]].text) + '»</button>' +
+      '<button class="btn btn-ghost" data-sc="only-second">Solo «' + esc(CHUNK_BY_ID[pending[1]].text) + '»</button>' +
+      '<button class="btn btn-ghost" data-sc="none">Ninguno</button></div>';
+  }
+  return h + '</div>';
+}
+function onSelfCheck(val){
+  const t = RT.turn;
+  const pending = t.chunks.filter(function(cid){ return !RT.scored[cid]; });
+  const evalMap = {};
+  if(pending.length===1){ evalMap[pending[0]] = (val==="used"); }
+  else {
+    evalMap[pending[0]] = (val==="both" || val==="only-first");
+    evalMap[pending[1]] = (val==="both" || val==="only-second");
+  }
+  evaluateProduction(evalMap);
+}
+function startRecording(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR) return;
+  try{
+    const recog = new SR();
+    recog.lang = "en-US"; recog.interimResults = false; recog.maxAlternatives = 3;
+    RT.recording = true; RT.recError = false; renderTurn();
+    recog.onresult = function(ev){
+      RT.recording = false;
+      const alts = [];
+      for(let i=0;i<ev.results[0].length;i++) alts.push(ev.results[0][i].transcript);
+      RT.lastTranscript = alts[0] || "";
+      const t = RT.turn;
+      const pending = t.chunks.filter(function(cid){ return !RT.scored[cid]; });
+      const evalMap = {};
+      if(pending.length===2){
+        pending.forEach(function(cid){ evalMap[cid] = false; });
+        alts.forEach(function(tr){
+          const w = normWords(tr);
+          const cw1 = normWords(CHUNK_BY_ID[pending[0]].text);
+          const cw2 = normWords(CHUNK_BY_ID[pending[1]].text);
+          const i1 = findSeq(w, cw1);
+          const ok1 = i1>=0 && (t.act===3 || i1<=13);
+          let ok2 = false;
+          if(i1>=0){ const rest = w.slice(i1 + cw1.length); ok2 = findSeq(rest, cw2) >= 0; }
+          if(ok1) evalMap[pending[0]] = true;
+          if(ok2) evalMap[pending[1]] = true;
+        });
+      } else {
+        pending.forEach(function(cid){ evalMap[cid] = alts.some(function(tr){ return chunkFoundIn(cid, tr, t.act); }); });
+      }
+      evaluateProduction(evalMap);
+    };
+    recog.onerror = function(){ if(RT){ RT.recording = false; RT.recError = true; renderTurn(); } };
+    recog.onend = function(){ if(RT && RT.recording){ RT.recording = false; renderTurn(); } };
+    recog.start();
+  }catch(e){ RT.recording = false; RT.recError = true; renderTurn(); }
+}
+/* ---------- Puntaje y retroalimentación ---------- */
+function scoreChunk(cid){
+  let cap = 10;
+  if(RT.hint>=2) cap = 8;
+  if(RT.hint>=3) cap = 5;
+  if(RT.prodFailed[cid]) cap = Math.min(cap, RT.turn.act===3 ? 5 : 7);
+  if(RT.choiceRevealed[cid]) cap = Math.min(cap, 7);
+  const firstTry = !RT.prodFailed[cid] && !(RT.choiceWrongs[cid]>0) && !RT.buildHadWrong;
+  const repasar = RT.hint>=3 || !!RT.prodFailed[cid] || !!RT.choiceRevealed[cid];
+  return { score: cap, firstTry: firstTry, repasar: repasar };
+}
+function evaluateProduction(evalMap){
+  RT.lastEval = evalMap;
+  Object.keys(evalMap).forEach(function(cid){
+    if(evalMap[cid]){ if(!RT.scored[cid]) RT.scored[cid] = scoreChunk(cid); }
+    else RT.prodFailed[cid] = true;
+  });
+  RT.step = "feedback"; RT.selfCheckOpen = false;
+  renderTurn();
+}
+function feedbackHtml(){
+  const t = RT.turn;
+  let h = '<div class="step-title">Retroalimentación del turno</div>';
+  let applause = false;
+  t.chunks.forEach(function(cid){
+    const r = RT.scored[cid];
+    if(r){
+      if(RT.lastEval && RT.lastEval[cid]){ h += '<div class="fb-ok">✔ Usaste: «' + esc(CHUNK_BY_ID[cid].text) + '» — +' + r.score + ' puntos</div>'; if(r.score>=8) applause = true; }
+      else h += '<div class="fb-ok">✔ «' + esc(CHUNK_BY_ID[cid].text) + '» ya estaba logrado (' + r.score + ' pts)</div>';
+    } else {
+      h += '<div class="fb-bad"><span class="max-says">Max: "Hmm, Ale, that sounded a bit flat…"</span><br>El chunk «' + esc(CHUNK_BY_ID[cid].text) + '» aún no suena en tu respuesta. Mira cómo lo dice Ale, léelo en voz alta dos veces y inténtalo de nuevo: el reintento vale hasta ' + (t.act===3 ? 5 : 7) + ' puntos.</div>';
+    }
+  });
+  if(applause) h += '<p style="font-weight:800;color:#6B4A08">👏👏 ¡El público aplaude! 👏👏</p>';
+  h += '<div class="model-box"><div class="m-title">Ale lo diría así</div><div class="m-text">«' + esc(t.model) + '»</div></div>';
+  t.chunks.forEach(function(cid){ h += '<p class="note-line">' + CHUNK_BY_ID[cid].note + '</p>'; });
+  const pending = t.chunks.filter(function(cid){ return !RT.scored[cid]; });
+  const isLast = S.run && (S.run.turnIdx === ACT_TURNS[t.act].length-1);
+  if(pending.length) h += '<div class="btn-row"><button class="btn btn-amber" data-testid="btn-retry">🔁 Intentar de nuevo</button></div>';
+  else h += '<div class="btn-row"><button class="btn btn-primary" data-testid="btn-next">' + (isLast ? "Terminar el acto ▶" : "Siguiente turno ▶") + '</button></div>';
+  return h;
+}
+function finishTurn(){
+  const run = S.run; const t = RT.turn;
+  run.results[t.id] = {};
+  t.chunks.forEach(function(cid){ run.results[t.id][cid] = RT.scored[cid]; });
+  if(run.turnIdx < ACT_TURNS[run.act].length-1){ run.turnIdx++; saveState(); startTurn(); }
+  else {
+    const res = buildActResult(run.act, run.results);
+    const prev = S.acts[String(run.act)].best;
+    const isBest = !prev || res.score > prev.score;
+    if(isBest) S.acts[String(run.act)].best = res;
+    LAST_SUMMARY = { act: run.act, result: res, isBest: isBest };
+    S.run = null; saveState(); renderActSummary();
+  }
+}
+function renderTurn(){
+  updateHUD();
+  const run = S.run; const t = RT.turn; const turns = ACT_TURNS[t.act];
+  let h = '<div class="card" id="turnRoot" data-turn="' + t.id + '">';
+  h += '<div class="turn-head"><span class="t-tag">' + ACT_INFO[t.act].tag + ' · Turno ' + (run.turnIdx+1) + ' de ' + turns.length + '</span><span class="t-score">Puntos en este acto: ' + runScoreSoFar() + '</span></div>';
+  if(t.redcarpet) h += '<div class="redcarpet">⭐ MOMENTO ALFOMBRA ROJA · SIN PISTAS ⭐</div>';
+  if(t.stage && !t.stageOnly) h += '<div class="stage-note">' + esc(t.stage) + '</div>';
+  if(t.stageOnly) h += '<div class="bubble max"><div class="who">' + esc(t.speaker) + '</div><div class="line" style="font-style:italic">' + esc(t.stage) + '</div></div>';
+  else h += '<div class="bubble max"><div class="who">' + (t.speaker==="Max" ? "Max Vidal" : esc(t.speaker)) + '</div><div class="line">"' + esc(t.line) + '"</div></div>';
+  if(t.interruption && RT.phase==="pre"){
+    h += '<div class="warn">⚠️ Instrucción del show: <b>Max te va a interrumpir. Es parte del show.</b> Empieza a contar tu historia y no te asustes cuando suene la banda.</div>';
+    h += '<div class="btn-row"><button class="btn btn-primary" data-testid="btn-responder">🎬 Responder</button></div>';
+    h += '</div>'; app.innerHTML = h; return;
+  }
+  if(t.interruption && RT.phase==="main"){
+    h += '<div class="interrupt-card"><div class="big">🎺🎉 ¡La banda entra de repente! ¡Aplausos del público! 🎉🎺</div><div class="muted">(Una «falla técnica»… muy oportuna)</div></div>';
+    h += '<div class="bubble max"><div class="who">Max Vidal</div><div class="line">"' + esc(t.interruptLine) + '"</div></div>';
+  }
+  h += hintHtml();
+  if(RT.step==="choose") h += choiceHtml();
+  else if(RT.step==="build") h += buildHtml();
+  else if(RT.step==="produce") h += produceHtml();
+  else if(RT.step==="feedback") h += feedbackHtml();
+  h += '</div>';
+  app.innerHTML = h;
+}
+
+/* =====================================================================
+   DISCURSO DE ORO
+   ===================================================================== */
+let goldenShowModel = false, goldenWarn = false;
+function stashGoldenInputs(){
+  const g1 = document.getElementById("g1"), g2 = document.getElementById("g2"), g3 = document.getElementById("g3");
+  if(g1){ S.golden.a = g1.value; S.golden.b = g2.value; S.golden.c = g3.value; }
+}
+function renderGolden(){
+  updateHUD();
+  const g = S.golden;
+  app.innerHTML =
+    '<div class="card">' +
+      '<div class="center"><div style="font-size:14px;font-weight:800;letter-spacing:2px;color:var(--amber);text-transform:uppercase">🌟 Cierre del show</div>' +
+      '<h2>El Discurso de Oro</h2></div>' +
+      '<div class="stage-note">(Max se despide del público y sale del set. Las luces bajan. Solo quedas tú, Ale, frente a la cámara.)</div>' +
+      '<p>Son tus <b>30 segundos finales</b>, en producción libre. Completa la plantilla con tus propias palabras: recicla los tres chunks de cierre de los tres actos.</p>' +
+      '<div class="golden-template">' +
+        '"At the end of the day, <input id="g1" type="text" placeholder="tu conclusión…" value="' + esc(g.a) + '">. ' +
+        'To wrap up: <input id="g2" type="text" placeholder="tu resumen…" value="' + esc(g.b) + '">. ' +
+        'And what happens next is <input id="g3" type="text" placeholder="lo que viene…" value="' + esc(g.c) + '">."' +
+      '</div>' +
+      (goldenWarn ? '<div class="fb-bad" style="margin-top:12px">Te falta completar los tres huecos del discurso. ¡Tú puedes, Ale!</div>' : "") +
+      '<div class="btn-row">' +
+        (SR_SUPPORTED ? '<button class="btn btn-amber" data-testid="golden-record">🎙 Grabar mi discurso</button>' : "") +
+        '<button class="btn btn-soft" data-testid="golden-model">' + (goldenShowModel ? "Ocultar el modelo" : "Ver el discurso modelo de Ale") + '</button>' +
+      '</div>' +
+      '<p class="small muted">Si grabas, tu voz se transcribe y se agrega al primer hueco vacío. También puedes decirlo en voz alta sin grabar: lo importante es que suene.</p>' +
+      (goldenShowModel ? '<div class="model-box"><div class="m-title">Discurso modelo de Ale</div><div class="m-text">«' + esc(GOLDEN_MODEL) + '»</div></div>' : "") +
+      '<div class="btn-row">' +
+        '<button class="btn btn-ghost" data-testid="to-cover">← Volver al menú</button>' +
+        '<button class="btn btn-primary" data-testid="golden-save">Guardar y ver mis resultados 🏆</button>' +
+      '</div>' +
+    '</div>';
+}
+function startGoldenRecording(){
+  stashGoldenInputs();
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR) return;
+  try{
+    const r = new SR(); r.lang = "en-US"; r.interimResults = false;
+    r.onresult = function(ev){
+      const tr = ev.results[0][0].transcript;
+      const g = S.golden; const field = !g.a ? "a" : (!g.b ? "b" : "c");
+      g[field] = (g[field] ? g[field] + " " : "") + tr;
+      saveState(); renderGolden();
+    };
+    r.onerror = function(){ renderGolden(); };
+    r.start();
+  }catch(e){}
+}
+function onGoldenSave(){
+  stashGoldenInputs();
+  const g = S.golden;
+  if(!g.a.trim() || !g.b.trim() || !g.c.trim()){ goldenWarn = true; renderGolden(); return; }
+  goldenWarn = false; g.done = true; saveState(); renderFinal();
+}
+
+/* =====================================================================
+   PANTALLA FINAL
+   ===================================================================== */
+function renderFinal(){
+  updateHUD();
+  const total = bestScore();
+  const pct = Math.round(total/300*100);
+  const full = total>0 ? Math.max(1, Math.round(pct/20)) : 0;
+  const stars = "★".repeat(full) + "☆".repeat(5-full);
+  const approved = total>=240 && actsDoneCount()===3;
+  let inv = "";
+  CHUNKS.forEach(function(c){
+    const r = chunkResultFromBest(c.id);
+    const cls = r ? (r.firstTry ? "first" : "retry") : "";
+    const mark = r ? (r.firstTry ? "⭐" : "✔") : "—";
+    inv += '<div class="inv-chip ' + cls + '" data-cid="' + c.id + '" data-status="' + (r ? (r.firstTry ? "first" : "retry") : "none") + '"><span class="lesson">' + c.lesson + '</span>' + esc(c.text) + ' <span class="pts">' + mark + (r ? " " + r.score + " pts" : "") + '</span></div>';
+  });
+  const repasar = CHUNKS.filter(function(c){ const r = chunkResultFromBest(c.id); return r && r.repasar; });
+  const g = S.golden;
+  app.innerHTML =
+    (approved
+      ? '<div class="seal"><div class="big">🏆 CAPSTONE DEL MÓDULO 1 · ¡APROBADO!</div><p>Completaste «La entrevista a Ale» con los 30 chunks intentados y más de 240 puntos. El Módulo 1 quedó instalado, Ale.</p></div>'
+      : '<div class="seal"><div class="big">🎬 Fin del show</div><p>Para aprobar el capstone necesitas <b>240 puntos o más</b> y los <b>30 chunks intentados</b>. Puedes repetir el acto que quieras para subir tu puntaje: siempre se conserva tu mejor nota.</p></div>') +
+    '<div class="card center">' +
+      '<h3>Tu noche en BEHIND THE FRAME</h3>' +
+      '<p style="font-size:26px;font-weight:800;color:var(--teal-dark)">Puntaje total: ' + total + ' / 300 (' + pct + '%)</p>' +
+      '<div class="stars">' + stars + '</div>' +
+      '<p>Rating del show: <b>' + full + ' de 5 estrellas</b> · 👏 Aplausómetro: <b>' + applauseCount() + '</b> chunks con aplauso (8 pts o más)</p>' +
+      '<p class="muted">Acto 1: <b>' + (S.acts["1"].best ? S.acts["1"].best.score : 0) + ' / 100</b> · Acto 2: <b>' + (S.acts["2"].best ? S.acts["2"].best.score : 0) + ' / 100</b> · Acto 3: <b>' + (S.acts["3"].best ? S.acts["3"].best.score : 0) + ' / 100</b></p>' +
+    '</div>' +
+    '<div class="card"><h3>🗺 Tu mapa del Módulo 1: los 30 chunks</h3><div class="inv-grid">' + inv + '</div>' +
+      '<p class="small muted" style="margin-top:10px">⭐ Ámbar = a la primera · ✔ Gris = con reintento o más pista.</p></div>' +
+    '<div class="card"><h3>📌 Para repasar</h3>' +
+      (repasar.length
+        ? '<p>Estos chunks te costaron (fallaste un intento o necesitaste la pista completa). Repásalos y serán tuyos:</p><p>' + repasar.map(function(c){ return '<b>' + esc(c.text) + '</b>'; }).join(' · ') + '</p>'
+        : '<p>🎉 ¡Ninguno! No tienes chunks en la lista de repaso: dominio total del Módulo 1.</p>') +
+    '</div>' +
+    (g.done ? '<div class="card"><h3>🌟 Tu frase de oro</h3><div class="model-box"><div class="m-text">"At the end of the day, ' + esc(g.a) + '. To wrap up: ' + esc(g.b) + '. And what happens next is ' + esc(g.c) + '."</div></div><p class="small muted">Tu discurso final, con los tres chunks de cierre: la prueba, en 30 segundos, de que el Módulo 1 quedó instalado.</p></div>' : "") +
+    '<div class="card center"><div class="btn-row" style="justify-content:center">' +
+      '<button class="btn btn-ghost" data-testid="to-cover">Ir al menú</button>' +
+      '<button class="btn btn-soft" data-testid="golden-start">🔁 Rehacer el Discurso de Oro</button>' +
+    '</div></div>';
+}
+
+/* =====================================================================
+   NAVEGACIÓN (delegación de clics)
+   ===================================================================== */
+app.addEventListener("click", function(ev){
+  const t = ev.target;
+  const actStart = t.closest("[data-act-start]");
+  if(actStart){ const a = parseInt(actStart.getAttribute("data-act-start"), 10); if(actUnlocked(a)) renderActIntro(a); return; }
+  const testidEl = t.closest("[data-testid]");
+  if(testidEl){
+    const id = testidEl.getAttribute("data-testid");
+    if(id==="to-cover"){ renderCover(); return; }
+    if(id==="reset-all"){ if(window.confirm("¿Borrar TODO tu avance de esta actividad?")){ S = defaultState(); saveState(); renderCover(); } return; }
+    if(id==="act-begin"){ const a = parseInt(testidEl.getAttribute("data-act"), 10); if(!S.run || S.run.act!==a){ S.run = { act:a, turnIdx:0, results:{} }; saveState(); } startTurn(); return; }
+    if(id==="repeat-act"){ const a = parseInt(testidEl.getAttribute("data-act"), 10); S.run = { act:a, turnIdx:0, results:{} }; saveState(); renderActIntro(a); return; }
+    if(id==="next-act"){ renderActIntro(parseInt(testidEl.getAttribute("data-act"), 10)); return; }
+    if(id==="golden-start"){ renderGolden(); return; }
+    if(id==="final-open"){ renderFinal(); return; }
+    if(id==="btn-responder"){ RT.phase = "main"; renderTurn(); return; }
+    if(id==="hint-show"){ RT.hint = 1; renderTurn(); return; }
+    if(id==="hint-more"){ if(RT.hint<3) RT.hint++; renderTurn(); return; }
+    if(id==="check-blocks"){ onCheckBlocks(); return; }
+    if(id==="clear-blocks"){ RT.builtIdx = []; refreshBuildArea(); return; }
+    if(id==="btn-record"){ if(RT && !RT.recording) startRecording(); return; }
+    if(id==="btn-selfcheck"){ RT.selfCheckOpen = true; renderTurn(); return; }
+    if(id==="btn-retry"){ RT.step = "produce"; RT.selfCheckOpen = false; RT.lastEval = null; renderTurn(); return; }
+    if(id==="btn-next"){ finishTurn(); return; }
+    if(id==="golden-model"){ stashGoldenInputs(); goldenShowModel = !goldenShowModel; renderGolden(); return; }
+    if(id==="golden-record"){ startGoldenRecording(); return; }
+    if(id==="golden-save"){ onGoldenSave(); return; }
+  }
+  const opt = t.closest(".opt-btn");
+  if(opt){ onChoice(opt); return; }
+  const blk = t.closest(".blk-btn");
+  if(blk && !blk.disabled){ RT.builtIdx.push(parseInt(blk.getAttribute("data-bi"), 10)); refreshBuildArea(); return; }
+  const sc = t.closest("[data-sc]");
+  if(sc){ onSelfCheck(sc.getAttribute("data-sc")); return; }
+});
+
+/* Inicio */
+updateHUD();
+renderCover();
+
+</script>
+</body>
+</html>
